@@ -4,9 +4,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    component: () => import('../components/HelloWorld')
-
-    
+    component: () => import('../components/HelloWorld'),
+    meta: {
+      title: "ユーザー情報管理システム"
+    }
   }
 ]
 

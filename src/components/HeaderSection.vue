@@ -1,6 +1,6 @@
 <template>
-  <div style="height : 100px">
-    <h1>個人情報管理システム</h1>
+  <div style="height : 100px" align="center">
+    <h1>ユーザー情報一覧</h1>
       <h2>{{ currentTime }}</h2>
   </div>
 </template>

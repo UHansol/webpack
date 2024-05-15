@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div align="center">
     <button v-for="page in pageCount" :key="page" @click="changePage(page)">{{ page }}</button>
   </div>
 </template>
@@ -26,8 +26,13 @@ export default {
 </script>
 
 <style scoped>
-div {
-  text-align: center;
+
+
+
+button {
+  margin-top: 50px;
+ font-size:20px  ;
+ margin-left: 5px;
 }
 
 </style>

@@ -1,92 +1,99 @@
 <template>
   <div align="right">
-    <button @click="showAddModal = true">追加</button>
+    <button @click="showAddModal = true">登録</button>
   </div>
 
   <div>
     <!-- 登録 -->
-    <Modal v-if="showAddModal" @close="showAddModal = false" title="追加">
+    <Modal v-if="showAddModal" @close="showAddModal = false" title="ユーザー情報登録">
       <table class="mo">
         <thead>
           <tr>
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Address</th>
-            <th>Birth</th>
-            <th>Gender</th>
-            <th>TelePhone</th>
-            <th>Remarks</th>
+            <th>名前(姓)</th>
+            <th>名前(名)</th>
+            <th>住所</th>
+            <th>生年月日</th>
+            <th>性別</th>
+            <th>電話番号</th>
+            <th>備考</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><input type="text" v-model="newData.firstname" placeholder="FirstName"></td>
+            <td><input type="text" v-model="newData.firstname" placeholder="FirstName" ref="cursor"></td>
             <td><input type="text" v-model="newData.lastname" placeholder="LastName"></td>
-            <td><input type="text" v-model="newData.address" placeholder="Address"></td>
+            <td><input type="text" v-model="newData.address" placeholder="住所"></td>
             <td><input type="text" v-model="newData.birth" placeholder="0000-00-00"></td>
             <td><input type="radio" v-model="newData.gender" value="男性">男性
               <input type="radio" v-model="newData.gender" value="女性">女性
             </td>
-            <td><input type="text" v-model="newData.telephone" placeholder="Telephone"></td>
-            <td><input type="text" v-model="newData.remarks" placeholder="Remarks"></td>
+            <td><input type="text" v-model="newData.telephone" placeholder="電話番号"></td>
+            <td><input type="text" v-model="newData.remarks" placeholder="備考"></td>
           </tr>
         </tbody>
       </table>
-      <!-- <button @click="showAddModal = false" style="float:right; margin-top: 5px;">キャンセル</button> -->
-      <button @click="addData" style="float:right; margin-top: 5px;">追加</button>
+      <button @click="addData" style="float:right; margin-top: 5px;">登録</button>
 
 
     </Modal>
 
-    <!-- 修正 -->
-    <Modal v-if="showEditModal" @close="showEditModal = false" title="修整">
+    <!-- 更新 -->
+    <Modal v-if="showEditModal" @close="showEditModal = false" title="ユーザー情報更新">
       <table class="mo">
         <thead>
           <tr>
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Address</th>
-            <th>Birth</th>
-            <th>TelePhone</th>
-            <th>Remarks</th>
+            <th>名前(姓)</th>
+            <th>名前(名)</th>
+            <th>住所</th>
+            <th>生年月日</th>
+            <th>性別</th>
+            <th>電話番号</th>
+            <th>備考</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><input type="text" v-model="editData.firstname" placeholder="FirstName"></td>
             <td><input type="text" v-model="editData.lastname" placeholder="LastName"></td>
-            <td><input type="text" v-model="editData.address" placeholder="Address"></td>
+            <td><input type="text" v-model="editData.address" placeholder="住所"></td>
             <td><input type="text" v-model="editData.birth" placeholder="0000-00-00"></td>
-            <td><input type="text" v-model="editData.telephone" placeholder="Telephone"></td>
-            <td><input type="text" v-model="editData.remarks" placeholder="Remarks"></td>
+            <td><input type="radio" v-model="editData.gender" value="男性">男性
+              <input type="radio" v-model="editData.gender" value="女性">女性
+            </td>
+            <td><input type="text" v-model="editData.telephone" placeholder="電話番号"></td>
+            <td><input type="text" v-model="editData.remarks" placeholder="備考"></td>
           </tr>
         </tbody>
       </table>
       <button @click="confirmEdit" style="float:right; margin-top: 5px;">確認</button>
     </Modal>
 
-    <!-- 削除 -->
-    <Modal v-if="showDeleteModal" @close="showDeleteModal = false" title="削除">
+    <!-- <Modal v-if="showDeleteModal" @close="showDeleteModal = false" title="削除">
       <table>
         <p>削除しますか?</p>
       </table>
       <button @click="deleteData" style="float:right; margin-top: 5px;">削除</button>
 
-    </Modal>
+    </Modal> -->
+
+    <!-- 検索 -->
+    <div id="Search">
+      <input type="text" v-model="searchId" placeholder="ID">
+      <button @click="searchById">検索</button>
+    </div>
 
     <!-- メイン画面 テーブル -->
     <table style="margin-top: 5px;">
-      <!-- テーブルをClickして整列 -->
       <thead>
         <tr>
           <th @click="sortData('id')">ID</th>
-          <th @click="sortData('firstname')">FirstName</th>
-          <th @click="sortData('lastname')">Lastname</th>
-          <th @click="sortData('address')">Address</th>
-          <th @click="sortData('birth')">Birth</th>
-          <th @click="sortData('gender')">Gender</th>
-          <th @click="sortData('telephone')">Telephone</th>
-          <th @click="sortData('remarks')">Remarks</th>
+          <th @click="sortData('firstname')">名前(姓)</th>
+          <th @click="sortData('lastname')">名前(名)</th>
+          <th @click="sortData('address')">住所</th>
+          <th @click="sortData('birth')">生年月日</th>
+          <th @click="sortData('gender')">性別</th>
+          <th @click="sortData('telephone')">電話番号</th>
+          <th @click="sortData('remarks')">備考</th>
           <th @click="sortData('updatedAt')" style="width : 15%">Update</th>
           <th @click="sortData('createdAt')" style="width : 15%">Create</th>
         </tr>
@@ -109,12 +116,14 @@
     </table>
 
     <!-- 修正ー削除 BTN -->
+
     <div id="ED">
-      <button @click="EditForm" :class="{ active: showEditModal }" :disabled="selectedId === null">修正</button>
-      <button @click="showDeleteModal = true" :disabled="selectedId === null">削除</button>
+      <button @click="EditForm" :class="{ active: showEditModal }" :disabled="selectedId === null">更新</button>
+      <button @click="deleteData" :disabled="selectedId === null">削除</button>
     </div>
 
     <!-- ページ -->
+
     <div>
       <PageSection :pageCount="pageCount" :currentPage="currentPage" @page-changed="changePage" />
     </div>
@@ -131,6 +140,7 @@ export default {
     PageSection,
     Modal,
   },
+
   data() {
     return {
       data: [],
@@ -140,8 +150,8 @@ export default {
       showEditModal: false,
       showDeleteModal: false,
       selectedId: null,
-      sortBy: '',
-      sortOrder: 1,
+      sortBy: 'id',
+      sortOrder: -1,
       currentPage: 1,
       pageSize: 10,
       searchId: ''
@@ -164,142 +174,141 @@ export default {
       if (!newVal) {
         this.editData = { id: null, firstname: '', lastname: '', address: '', birth: '', gender: '', telephone: '', remarks: '' };
       }
-    },
+    }
   },
-
-
   methods: {
+    nameCursor() {
+      this.$refs.cursor.focus();
+     },
 
+      isValidDateFormat(date) {
+        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        return regex.test(date);
+      },
 
-    selectRow(id) {
-      this.selectedId = (this.selectedId === id) ? null : id;
-    },
-
-    // 検索
-    searchById() {
-      if (this.searchId.trim() === '') {
-        axios.get(`/api/users`)
+      selectRow(id) {
+        this.selectedId = (this.selectedId === id) ? null : id;
+      },
+      searchById() {
+        if (this.searchId.trim() === '') {
+          axios.get(`/api/users`)
+            .then(response => {
+              this.data = response.data;
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        } else {
+          axios.get(`/api/users/${this.searchId}`)
+            .then(response => {
+              this.data = response.data ? [response.data] : [];
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        }
+      },
+      sortData(key) {
+        if (this.sortBy === key) {
+          this.sortOrder *= -1;
+        } else {
+          this.sortBy = key;
+          this.sortOrder = 1;
+        }
+      },
+      fetchData() {
+        axios.get('/api/users')
           .then(response => {
             this.data = response.data;
           })
           .catch(error => {
             console.error('Error:', error);
           });
-      } else {
-        axios.get(`/api/users/${this.searchId}`)
-          .then(response => {
-            this.data = response.data ? [response.data] : [];
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-      }
-    },
-
-    // 整列
-    sortData(key) {
-      if (this.sortBy === key) {
-        this.sortOrder *= -1;
-      } else {
-        this.sortBy = key;
-        this.sortOrder = 1;
-      }
-    },
-
-    // でーた表示
-    fetchData() {
-      axios.get('/api/users')
-        .then(response => {
-          this.data = response.data;
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    },
-
-    // 修正
-    EditForm() {
-      if (this.selectedId) {
-        const selectedItem = this.data.find(item => item.id === this.selectedId);
-        if (selectedItem) {
-          this.editData = { ...selectedItem };
-          this.showEditModal = true;
+      },
+      EditForm() {
+        if (this.selectedId) {
+          const selectedItem = this.data.find(item => item.id === this.selectedId);
+          if (selectedItem) {
+            this.editData = { ...selectedItem };
+            this.showEditModal = true;
+          }
+        } else {
+          this.showEditModal = false;
         }
-      } else {
-        this.showEditModal = false;
-      }
-    },
-    confirmEdit() {
-      if (confirm("修正しますか?")) {
-        axios.put(`/api/users/${this.editData.id}`, this.editData)
+      },
+      confirmEdit() {
+        if (confirm("修正しますか?"))
+          if (this.editData.firstname.trim() === '' || this.editData.lastname.trim() === '') {
+            window.alert("名前を確認してください")
+            // } else if (this.editData.birth !== '' && !this.isValidDateFormat(this.editData.birth.trim())) {
+            //   window.alert("生年月日を確認してください")
+            // } else {
+          } else{
+            axios.put(`/api/users/${this.selectedId}`, this.editData)
+              .then(() => {
+                this.fetchData();
+                this.showEditModal = false
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+
+          }
+      },
+      addData() {
+        if (this.newData.firstname.trim() === '' || this.newData.lastname.trim() === '') {
+          window.alert("名前を入力してください")
+        } else if (this.newData.birth.trim() !== '' && !this.isValidDateFormat(this.newData.birth.trim())) {
+          window.alert("生年月日を確認してください")
+          this.nameCursor();
+        } else {
+          axios.post('/api/users', this.newData)
+            .then(() => {
+              this.fetchData();
+              this.showAddModal = false;
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        }
+      },
+    deleteData() {
+      if (confirm("削除しますか?")) {
+        axios.delete(`/api/users/${this.selectedId}`)
           .then(() => {
             this.fetchData();
-            this.showEditModal = false;
+            
           })
           .catch(error => {
             console.error('Error:', error);
           });
       }
     },
+      changePage(page) {
+        this.currentPage = page;
+      }
+    },
+    computed: {
 
-    // 登録
-    addData() {
-      if (this.newData.firstname.trim() === '' || this.newData.lastname.trim() === '') {
-        window.alert("名前を入力してください")
-      }else
-      axios.post('/api/users', this.newData)
-        .then(() => {
-          this.fetchData();
-          this.showAddModal = false;
-        })
-        .catch(error => {
-          console.error('Error:', error);
+      sortedData() {
+        return this.data.slice().sort((a, b) => {
+          if (a[this.sortBy] < b[this.sortBy]) return -1 * this.sortOrder;
+          if (a[this.sortBy] > b[this.sortBy]) return 1 * this.sortOrder;
+          return 0;
         });
+      },
+      paginatedData() {
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        return this.sortedData.slice(startIndex, startIndex + this.pageSize);
+      },
+      pageCount() {
+        return Math.ceil(this.sortedData.length / this.pageSize);
+      }
     },
-
-    // 削除
-    deleteData() {
-      axios.delete(`/api/users/${this.selectedId}`)
-        .then(() => {
-          this.fetchData();
-          this.showDeleteModal = false;
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    },
-
-    // ページ
-    changePage(page) {
-      this.currentPage = page;
+    mounted() {
+      this.fetchData();
     }
-  },
-  computed: {
-
-    // 整列
-    sortedData() {
-      return this.data.slice().sort((a, b) => {
-        if (a[this.sortBy] < b[this.sortBy]) return -1 * this.sortOrder;
-        if (a[this.sortBy] > b[this.sortBy]) return 1 * this.sortOrder;
-        return 0;
-      });
-    },
-
-    // ページ
-    paginatedData() {
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      return this.sortedData.slice(startIndex, startIndex + this.pageSize);
-    },
-    pageCount() {
-      return Math.ceil(this.sortedData.length / this.pageSize);
-    }
-  },
-
-  // 画面表示
-  mounted() {
-    this.fetchData();
   }
-}
 </script>
 
 <style scoped>
@@ -339,7 +348,7 @@ button.active {
 }
 
 #ED {
-  float: right;
+  text-align: right;
     margin-right: 4px;
     margin-top: 5px;
 }
