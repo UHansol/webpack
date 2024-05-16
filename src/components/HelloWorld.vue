@@ -4,82 +4,79 @@
   </div>
 
   <div>
-    <!-- 登録 -->
+    <!-- 등록 -->
     <Modal v-if="showAddModal" @close="showAddModal = false" title="ユーザー情報登録">
       <table class="mo">
-        <thead>
-          <tr>
-            <th>名前(姓)</th>
-            <th>名前(名)</th>
-            <th>住所</th>
-            <th>生年月日</th>
-            <th>性別</th>
-            <th>電話番号</th>
-            <th>備考</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input type="text" v-model="newData.firstname" placeholder="FirstName" ref="cursor"></td>
-            <td><input type="text" v-model="newData.lastname" placeholder="LastName"></td>
-            <td><input type="text" v-model="newData.address" placeholder="住所"></td>
-            <td><input type="text" v-model="newData.birth" placeholder="0000-00-00"></td>
-            <td><input type="radio" v-model="newData.gender" value="男性">男性
-              <input type="radio" v-model="newData.gender" value="女性">女性
-            </td>
-            <td><input type="text" v-model="newData.telephone" placeholder="電話番号"></td>
-            <td><input type="text" v-model="newData.remarks" placeholder="備考"></td>
-          </tr>
-        </tbody>
+        <tr>
+          <td><label>名前(姓)</label></td>
+          <td><input type="text" v-model="newData.firstname" placeholder="FirstName"></td>
+        </tr>
+        <tr>
+          <td><label>名前(名)</label></td>
+          <td><input type="text" v-model="newData.lastname" placeholder="LastName"></td>
+        </tr>
+        <tr>
+          <td><label>住所</label></td>
+          <td><input type="text" v-model="newData.address" placeholder="Address"></td>
+        </tr>
+        <tr>
+          <td><label>生年月日</label></td>
+          <td><input type="text" v-model="newData.birth" placeholder="Birth"></td>
+        </tr>
+        <tr>
+          <td><label>性別</label></td>
+          <td><input type="radio" v-model="newData.gender" value="男性">男性
+            <input type="radio" v-model="newData.gender" value="女性">女性
+          </td>
+        </tr>
+        <tr>
+          <td><label>電話番号</label></td>
+          <td><input type="text" v-model="newData.telephone" placeholder="電話番号"></td>
+        </tr>
       </table>
       <button @click="addData" style="float:right; margin-top: 5px;">登録</button>
-
-
     </Modal>
+
 
     <!-- 更新 -->
     <Modal v-if="showEditModal" @close="showEditModal = false" title="ユーザー情報更新">
       <table class="mo">
-        <thead>
-          <tr>
-            <th>名前(姓)</th>
-            <th>名前(名)</th>
-            <th>住所</th>
-            <th>生年月日</th>
-            <th>性別</th>
-            <th>電話番号</th>
-            <th>備考</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input type="text" v-model="editData.firstname" placeholder="FirstName"></td>
-            <td><input type="text" v-model="editData.lastname" placeholder="LastName"></td>
-            <td><input type="text" v-model="editData.address" placeholder="住所"></td>
-            <td><input type="text" v-model="editData.birth" placeholder="0000-00-00"></td>
-            <td><input type="radio" v-model="editData.gender" value="男性">男性
-              <input type="radio" v-model="editData.gender" value="女性">女性
-            </td>
-            <td><input type="text" v-model="editData.telephone" placeholder="電話番号"></td>
-            <td><input type="text" v-model="editData.remarks" placeholder="備考"></td>
-          </tr>
-        </tbody>
+        <tr>
+          <td><label>名前(姓)</label></td>
+          <td><input type="text" v-model="editData.firstname" placeholder="FirstName" ref="cursor"></td>
+        </tr>
+        <tr>
+          <td><label>名前(名)</label></td>
+          <td><input type="text" v-model="editData.lastname" placeholder="LastName"></td>
+        </tr>
+        <tr>
+          <td><label>住所</label></td>
+          <td><input type="text" v-model="editData.address" placeholder="Address"></td>
+        </tr>
+        <tr>
+          <td><label>生年月日</label></td>
+          <td><input type="text" v-model="editData.birth" placeholder="Birth"></td>
+        </tr>
+        <tr>
+          <td><label>性別</label></td>
+          <td><input type="radio" v-model="editData.gender" value="男性">男性
+            <input type="radio" v-model="editData.gender" value="女性">女性
+          </td>
+        </tr>
+        <tr>
+          <td><label>電話番号</label></td>
+          <td><input type="text" v-model="editData.telephone" placeholder="電話番号"></td>
+        </tr>
       </table>
+
       <button @click="confirmEdit" style="float:right; margin-top: 5px;">確認</button>
     </Modal>
-
-    <!-- <Modal v-if="showDeleteModal" @close="showDeleteModal = false" title="削除">
-      <table>
-        <p>削除しますか?</p>
-      </table>
-      <button @click="deleteData" style="float:right; margin-top: 5px;">削除</button>
-
-    </Modal> -->
 
     <!-- 検索 -->
     <div id="Search">
       <input type="text" v-model="searchId" placeholder="ID">
       <button @click="searchById">検索</button>
+
     </div>
 
     <!-- メイン画面 テーブル -->
@@ -93,12 +90,12 @@
           <th @click="sortData('birth')">生年月日</th>
           <th @click="sortData('gender')">性別</th>
           <th @click="sortData('telephone')">電話番号</th>
-          <th @click="sortData('remarks')">備考</th>
-          <th @click="sortData('updatedAt')" style="width : 15%">Update</th>
-          <th @click="sortData('createdAt')" style="width : 15%">Create</th>
+          <th @click="sortData('updatedAt')" style="width : 15%">更新日時</th>
+          <th @click="sortData('createdAt')" style="width : 15%">登録日時</th>
         </tr>
       </thead>
       <tbody>
+
         <tr v-for="(item) in paginatedData" :key="item.id" @click="selectRow(item.id)"
           :class="{ selected: selectedId === item.id }">
           <td>{{ item.id }}</td>
@@ -108,7 +105,6 @@
           <td>{{ item.birth }}</td>
           <td>{{ item.gender }}</td>
           <td>{{ item.telephone }}</td>
-          <td>{{ item.remarks }}</td>
           <td style="width : 15%">{{ item.updatedAt }}</td>
           <td style="width : 15%">{{ item.createdAt }}</td>
         </tr>
@@ -144,8 +140,8 @@ export default {
   data() {
     return {
       data: [],
-      newData: { firstname: '', lastname: '', address: '', birth: '', gender: '', telephone: '', remarks: '' },
-      editData: { id: null, firstname: '', lastname: '', address: '', birth: '', gender: '', telephone: '', remarks: '' },
+      newData: { firstname: '', lastname: '', address: '', birth: '', gender: '', telephone: ''},
+      editData: { id: null, firstname: '', lastname: '', address: '', birth: '', gender: '', telephone: ''},
       showAddModal: false,
       showEditModal: false,
       showDeleteModal: false,
@@ -167,25 +163,16 @@ export default {
     },
     showAddModal(newVal) {
       if (!newVal) {
-        this.newData = { firstname: '', lastname: '', address: '', birth: '', gender: '', telephone: '', remarks: '' };
+        this.newData = { firstname: '', lastname: '', address: '', birth: '', gender: '', telephone: '' };
       }
     },
     showEditModal(newVal) {
       if (!newVal) {
-        this.editData = { id: null, firstname: '', lastname: '', address: '', birth: '', gender: '', telephone: '', remarks: '' };
+        this.editData = { id: null, firstname: '', lastname: '', address: '', birth: '', gender: '', telephone: '' };
       }
     }
   },
   methods: {
-    nameCursor() {
-      this.$refs.cursor.focus();
-     },
-
-      isValidDateFormat(date) {
-        const regex = /^\d{4}-\d{2}-\d{2}$/;
-        return regex.test(date);
-      },
-
       selectRow(id) {
         this.selectedId = (this.selectedId === id) ? null : id;
       },
@@ -194,17 +181,17 @@ export default {
           axios.get(`/api/users`)
             .then(response => {
               this.data = response.data;
+
             })
-            .catch(error => {
-              console.error('Error:', error);
-            });
         } else {
           axios.get(`/api/users/${this.searchId}`)
             .then(response => {
               this.data = response.data ? [response.data] : [];
+              
             })
             .catch(error => {
               console.error('Error:', error);
+              alert("検索結果が存在しません");
             });
         }
       },
@@ -240,9 +227,6 @@ export default {
         if (confirm("修正しますか?"))
           if (this.editData.firstname.trim() === '' || this.editData.lastname.trim() === '') {
             window.alert("名前を確認してください")
-            // } else if (this.editData.birth !== '' && !this.isValidDateFormat(this.editData.birth.trim())) {
-            //   window.alert("生年月日を確認してください")
-            // } else {
           } else{
             axios.put(`/api/users/${this.selectedId}`, this.editData)
               .then(() => {
@@ -258,9 +242,6 @@ export default {
       addData() {
         if (this.newData.firstname.trim() === '' || this.newData.lastname.trim() === '') {
           window.alert("名前を入力してください")
-        } else if (this.newData.birth.trim() !== '' && !this.isValidDateFormat(this.newData.birth.trim())) {
-          window.alert("生年月日を確認してください")
-          this.nameCursor();
         } else {
           axios.post('/api/users', this.newData)
             .then(() => {
@@ -277,6 +258,7 @@ export default {
         axios.delete(`/api/users/${this.selectedId}`)
           .then(() => {
             this.fetchData();
+            this.selectedId = null;
             
           })
           .catch(error => {
@@ -355,5 +337,10 @@ button.active {
 #Search {
   
   float: right;
+}
+
+td input[type="text"] {
+  width: 250px;
+
 }
 </style>

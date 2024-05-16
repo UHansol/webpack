@@ -1,6 +1,15 @@
 <template>
   <div align="center">
-    <button v-for="page in pageCount" :key="page" @click="changePage(page)">{{ page }}</button>
+    <span @click="changePage(1)" :class="{ disabled: currentPage === 1 }" class="pagination-btn"
+      style="cursor: default;">&lt;&lt;</span>
+    <span @click="changePage(currentPage - 1)" :class="{ disabled: currentPage === 1 }" class="pagination-btn"
+      style="cursor: default;">&lt;</span>
+    <span v-for="page in displayedPages" :key="page" @click="changePage(page)" :class="{ active: currentPage === page }"
+      class="pagination-btn" style="cursor: default;">{{ page }}</span>
+    <span @click="changePage(currentPage + 1)" :class="{ disabled: currentPage === pageCount }" class="pagination-btn"
+      style="cursor: default;">&gt;</span>
+    <span @click="changePage(pageCount)" :class="{ disabled: currentPage === pageCount }" class="pagination-btn"
+      style="cursor: default;">&gt;&gt;</span>
   </div>
 </template>
 
@@ -17,22 +26,41 @@ export default {
       required: true
     }
   },
+  computed: {
+    displayedPages() {
+      const groupSize = 5;
+      const currentGroup = Math.ceil(this.currentPage / groupSize);
+      const startPage = (currentGroup - 1) * groupSize + 1;
+      const endPage = Math.min(startPage + groupSize - 1, this.pageCount);
+      return Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index);
+    }
+  },
   methods: {
     changePage(page) {
-      this.$emit('page-changed', page);
+      if (page >= 1 && page <= this.pageCount) {
+        this.$emit('page-changed', page);
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-
-
-
-button {
-  margin-top: 50px;
- font-size:20px  ;
- margin-left: 5px;
+.pagination-btn {
+  margin-top: 10px;
+  font-size: 16px;
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
 }
 
+.pagination-btn.active {
+  color: red;
+}
+
+.pagination-btn.disabled {
+  color: gray;
+  cursor: not-allowed;
+}
 </style>

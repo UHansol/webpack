@@ -20,9 +20,6 @@ export default {
       axios.get('/api/clock')
         .then(response => {
           this.currentTime = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching clock:', error);
         });
     });
   }

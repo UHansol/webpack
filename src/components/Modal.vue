@@ -1,7 +1,7 @@
 <template>
   <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-content">
-      <h1>{{ title }}</h1>
+      <h3>{{ title }}</h3>
       <slot></slot>
     </div>
   </div>
@@ -33,5 +33,8 @@ export default {
   padding: 20px;
   border-radius: 10px;
   width: auto;
+}
+h3{
+  text-align: center;
 }
 </style>
