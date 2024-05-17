@@ -1,15 +1,15 @@
 <template>
   <HeaderSection />
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
-import HeaderSection from './components/HeaderSection.vue'
+import HeaderSection from "./components/HeaderSection.vue";
 
 export default {
-  name: 'App',
-    components: {
-      HeaderSection
-  }
-}
+  name: "App",
+  components: {
+    HeaderSection,
+  },
+};
 </script>

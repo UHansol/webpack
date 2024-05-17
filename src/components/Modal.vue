@@ -10,12 +10,11 @@
 <script>
 export default {
   // 親Componentsから継承
-  props: ['title']
-}
+  props: ["title"],
+};
 </script>
 
 <style scoped>
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -34,7 +33,7 @@ export default {
   border-radius: 10px;
   width: auto;
 }
-h3{
+h3 {
   text-align: center;
 }
 </style>
