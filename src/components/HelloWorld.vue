@@ -48,6 +48,9 @@
               v-model="newData.birth"
               format="yyyy-MM-dd"
               :enable-time-picker="false"
+              :max-date="new Date()"
+              :clearable="false"
+              no-today
             />
           </td>
         </tr>
@@ -65,6 +68,7 @@
               type="text"
               v-model="newData.telephone"
               placeholder="電話番号"
+              v-mask="'###-###-####'"
             />
           </td>
         </tr>
@@ -88,7 +92,6 @@
               type="text"
               v-model="editData.firstname"
               placeholder="FirstName"
-              ref="cursor"
             />
           </td>
         </tr>
@@ -116,9 +119,12 @@
           <td><label>生年月日</label></td>
           <td>
             <VueDatePicker
-              v-model="editData"
+              v-model="editData.birth"
               format="yyyy-MM-dd"
               :enable-time-picker="false"
+              :max-date="new Date()"
+              :clearable="false"
+              no-today
             />
           </td>
         </tr>
@@ -136,6 +142,7 @@
               type="text"
               v-model="editData.telephone"
               placeholder="電話番号"
+              v-mask="'###-###-####'"
             />
           </td>
         </tr>
@@ -174,15 +181,15 @@
           @click="selectRow(item.id)"
           :class="{ selected: selectedId === item.id }"
         >
-          <td>{{ item.id }}</td>
-          <td>{{ item.firstname }}</td>
-          <td>{{ item.lastname }}</td>
-          <td>{{ item.address }}</td>
-          <td>{{ item.birth }}</td>
+          <td style="width: 50px">{{ item.id }}</td>
+          <td style="width: 100px">{{ item.firstname }}</td>
+          <td style="width: 100px">{{ item.lastname }}</td>
+          <td style="width: 330px">{{ item.address }}</td>
+          <td style="width: 140px">{{ item.birth }}</td>
           <td>{{ item.gender }}</td>
           <td>{{ item.telephone }}</td>
-          <td style="width: 15%">{{ item.updatedAt }}</td>
-          <td style="width: 15%">{{ item.createdAt }}</td>
+          <td style="width: 210px">{{ item.updatedAt }}</td>
+          <td style="width: 210px">{{ item.createdAt }}</td>
         </tr>
       </tbody>
     </table>
@@ -428,6 +435,7 @@ td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
+  width: auto;
 }
 
 th {
@@ -449,7 +457,7 @@ button.active {
 }
 
 .selected {
-  background-color: #e9e9e9;
+  background-color: #e9e9e9 !important;
 }
 
 #ED {
@@ -463,5 +471,9 @@ button.active {
 
 td input[type="text"] {
   width: 250px;
+}
+
+tr:nth-child(even) {
+  background-color: #f4feff;
 }
 </style>
