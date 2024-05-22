@@ -4,7 +4,7 @@
   </div>
 
   <div>
-    <!-- 등록 -->
+    <!-- 登録MODAL -->
     <Modal
       v-if="showAddModal"
       @close="showAddModal = false"
@@ -12,22 +12,26 @@
     >
       <table class="mo">
         <tr>
-          <td><label>名前(姓)</label></td>
+          <td><label>氏名(姓)</label></td>
           <td>
             <input
               type="text"
               v-model="newData.firstname"
               placeholder="FirstName"
+              id="Fname1"
+              maxlength="20"
             />
           </td>
         </tr>
         <tr>
-          <td><label>名前(名)</label></td>
+          <td><label>氏名(名)</label></td>
           <td>
             <input
               type="text"
               v-model="newData.lastname"
               placeholder="LastName"
+              id="Lname1"
+              maxlength="20"
             />
           </td>
         </tr>
@@ -38,6 +42,8 @@
               type="text"
               v-model="newData.address"
               placeholder="Address"
+              id="address1"
+              maxlength="30"
             />
           </td>
         </tr>
@@ -51,6 +57,7 @@
               :max-date="new Date()"
               :clearable="false"
               no-today
+              id="birth1"
             />
           </td>
         </tr>
@@ -69,6 +76,8 @@
               v-model="newData.telephone"
               placeholder="電話番号"
               v-mask="'###-###-####'"
+              id="tel1"
+              onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');"
             />
           </td>
         </tr>
@@ -78,7 +87,7 @@
       </button>
     </Modal>
 
-    <!-- 更新 -->
+    <!-- 更新MODAL -->
     <Modal
       v-if="showEditModal"
       @close="showEditModal = false"
@@ -86,22 +95,26 @@
     >
       <table class="mo">
         <tr>
-          <td><label>名前(姓)</label></td>
+          <td><label>氏名(姓)</label></td>
           <td>
             <input
               type="text"
               v-model="editData.firstname"
               placeholder="FirstName"
+              id="Fname2"
+              maxlength="20"
             />
           </td>
         </tr>
         <tr>
-          <td><label>名前(名)</label></td>
+          <td><label>氏名(名)</label></td>
           <td>
             <input
               type="text"
               v-model="editData.lastname"
               placeholder="LastName"
+              id="Lname2"
+              maxlength="20"
             />
           </td>
         </tr>
@@ -112,6 +125,8 @@
               type="text"
               v-model="editData.address"
               placeholder="Address"
+              id="address2"
+              maxlength="30"
             />
           </td>
         </tr>
@@ -125,6 +140,7 @@
               :max-date="new Date()"
               :clearable="false"
               no-today
+              id="birth2"
             />
           </td>
         </tr>
@@ -143,6 +159,8 @@
               v-model="editData.telephone"
               placeholder="電話番号"
               v-mask="'###-###-####'"
+              id="tel2"
+              onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');"
             />
           </td>
         </tr>
@@ -160,39 +178,13 @@
     </div>
 
     <!-- メイン画面 テーブル -->
-    <table style="margin-top: 5px">
-      <thead>
-        <tr>
-          <th @click="sortData('id')">ID</th>
-          <th @click="sortData('firstname')">名前(姓)</th>
-          <th @click="sortData('lastname')">名前(名)</th>
-          <th @click="sortData('address')">住所</th>
-          <th @click="sortData('birth')">生年月日</th>
-          <th @click="sortData('gender')">性別</th>
-          <th @click="sortData('telephone')">電話番号</th>
-          <th @click="sortData('updatedAt')" style="width: 15%">更新日時</th>
-          <th @click="sortData('createdAt')" style="width: 15%">登録日時</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="item in paginatedData"
-          :key="item.id"
-          @click="selectRow(item.id)"
-          :class="{ selected: selectedId === item.id }"
-        >
-          <td style="width: 50px">{{ item.id }}</td>
-          <td style="width: 100px">{{ item.firstname }}</td>
-          <td style="width: 100px">{{ item.lastname }}</td>
-          <td style="width: 330px">{{ item.address }}</td>
-          <td style="width: 140px">{{ item.birth }}</td>
-          <td>{{ item.gender }}</td>
-          <td>{{ item.telephone }}</td>
-          <td style="width: 210px">{{ item.updatedAt }}</td>
-          <td style="width: 210px">{{ item.createdAt }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <TableSection
+      :data="data"
+      :paginatedData="paginatedData"
+      :sortData="sortData"
+      :selectRow="selectRow"
+      :selectedId="selectedId"
+    />
 
     <!-- 修正ー削除 BTN -->
 
@@ -222,12 +214,14 @@
 <script>
 import axios from "axios";
 import PageSection from "./PageSection.vue";
-import Modal from "./Modal.vue";
+import Modal from "./ModalSection.vue";
+import TableSection from "./TableSection.vue";
 
 export default {
   components: {
     PageSection,
     Modal,
+    TableSection,
   },
 
   data() {
@@ -261,6 +255,8 @@ export default {
       searchId: "",
     };
   },
+
+  // --------------------------------------------watch------------------------------------------
   watch: {
     selectedId(newVal, oldVal) {
       if (newVal !== oldVal) {
@@ -294,6 +290,8 @@ export default {
       }
     },
   },
+
+  // --------------------------------------------method------------------------------------------
   methods: {
     selectRow(id) {
       this.selectedId = this.selectedId === id ? null : id;
@@ -302,16 +300,22 @@ export default {
       if (this.searchId.trim() === "") {
         axios.get(`/api/users`).then((response) => {
           this.data = response.data;
+          this.searchId = "";
         });
       } else {
         axios
           .get(`/api/users/${this.searchId}`)
           .then((response) => {
             this.data = response.data ? [response.data] : [];
+            this.searchId = "";
           })
           .catch((error) => {
-            console.error("Error:", error);
-            alert("検索結果が存在しません");
+            axios.get(`/api/users`).then((response) => {
+              this.data = response.data;
+              this.searchId = "";
+              alert("検索結果が存在しません");
+              console.error("Error:", error);
+            });
           });
       }
     },
@@ -348,11 +352,20 @@ export default {
     },
     confirmEdit() {
       if (confirm("修正しますか?"))
-        if (
-          this.editData.firstname.trim() === "" ||
-          this.editData.lastname.trim() === ""
-        ) {
-          window.alert("名前を確認してください");
+        if (this.editData.firstname.trim() === "") {
+          document.getElementById("Fname2").focus();
+          window.alert("氏名(姓)を確認してください");
+        } else if (this.editData.lastname.trim() === "") {
+          document.getElementById("Lname2").focus();
+          window.alert("氏名(名)を確認してください");
+        } else if (this.editData.address.trim() === "") {
+          document.getElementById("address2").focus();
+          window.alert("住所を確認してください");
+        } else if (this.editData.birth === "") {
+          window.alert("生年月日を確認してください");
+        } else if (this.editData.telephone.trim() === "") {
+          document.getElementById("tel2").focus();
+          window.alert("電話番号を確認してください");
         } else {
           axios
             .put(`/api/users/${this.selectedId}`, this.editData)
@@ -366,11 +379,20 @@ export default {
         }
     },
     addData() {
-      if (
-        this.newData.firstname.trim() === "" ||
-        this.newData.lastname.trim() === ""
-      ) {
-        window.alert("名前を入力してください");
+      if (this.newData.firstname.trim() === "") {
+        document.getElementById("Fname1").focus();
+        window.alert("氏名(姓)を入力してください");
+      } else if (this.newData.lastname.trim() === "") {
+        document.getElementById("Lname1").focus();
+        window.alert("氏名(名)を入力してください");
+      } else if (this.newData.address.trim() === "") {
+        document.getElementById("address1").focus();
+        window.alert("住所を入力してください");
+      } else if (this.newData.birth === "") {
+        window.alert("生年月日を入力してください");
+      } else if (this.newData.telephone.trim() === "") {
+        document.getElementById("tel1").focus();
+        window.alert("電話番号を入力してください");
       } else {
         axios
           .post("/api/users", this.newData)
@@ -400,6 +422,8 @@ export default {
       this.currentPage = page;
     },
   },
+
+  // -------------------------------------Computed--------------------------------------
   computed: {
     sortedData() {
       return this.data.slice().sort((a, b) => {

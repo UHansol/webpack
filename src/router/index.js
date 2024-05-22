@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 const routes = [
   {
     path: "/",
-    component: () => import("../components/HelloWorld"),
+    component: () => import("../components/MainSection.vue"),
     meta: {
       title: "ユーザー情報管理システム",
     },
