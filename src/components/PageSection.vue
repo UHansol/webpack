@@ -1,7 +1,7 @@
 <template>
   <div align="center">
     <span
-      v-if="pageCount !== 1"
+      v-if="currentPage !== 1"
       @click="changePage(1)"
       :class="{ disabled: currentPage === 1 }"
       class="pagination-btn"
@@ -9,7 +9,7 @@
       >&lt;&lt;</span
     >
     <span
-      v-if="pageCount !== 1"
+      v-if="currentPage !== 1"
       @click="changePage(currentPage - 1)"
       :class="{ disabled: currentPage === 1 }"
       class="pagination-btn"
@@ -26,7 +26,7 @@
       >{{ page }}</span
     >
     <span
-      v-if="pageCount !== 1"
+      v-if="currentPage !== pageCount"
       @click="changePage(currentPage + 1)"
       :class="{ disabled: currentPage === pageCount }"
       class="pagination-btn"
@@ -34,9 +34,9 @@
       >&gt;</span
     >
     <span
-      v-if="pageCount !== 1"
-      @click="changePage(pageCount)"
+      v-if="currentPage !== pageCount"
       :class="{ disabled: currentPage === pageCount }"
+      @click="changePage(pageCount)"
       class="pagination-btn"
       style="cursor: default"
       >&gt;&gt;</span

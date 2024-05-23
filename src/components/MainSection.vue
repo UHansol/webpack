@@ -75,7 +75,7 @@
               type="text"
               v-model="newData.telephone"
               placeholder="電話番号"
-              v-mask="'###-###-####'"
+              v-mask="'###-####-####'"
               id="tel1"
               onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');"
             />
@@ -158,7 +158,7 @@
               type="text"
               v-model="editData.telephone"
               placeholder="電話番号"
-              v-mask="'###-###-####'"
+              v-mask="'###-####-####'"
               id="tel2"
               onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');"
             />
@@ -293,6 +293,10 @@ export default {
 
   // --------------------------------------------method------------------------------------------
   methods: {
+    validatePhoneNumber(phoneNumber) {
+      const regex = /^\d{3}-\d{4}-\d{4}$/;
+      return regex.test(phoneNumber);
+    },
     selectRow(id) {
       this.selectedId = this.selectedId === id ? null : id;
     },
@@ -355,15 +359,21 @@ export default {
         if (this.editData.firstname.trim() === "") {
           document.getElementById("Fname2").focus();
           window.alert("氏名(姓)を確認してください");
+        } else if (/\d/.test(this.editData.firstname)) {
+          document.getElementById("Fname2").focus();
+          window.alert("氏名(姓)には数字が含まれてはいけません");
         } else if (this.editData.lastname.trim() === "") {
           document.getElementById("Lname2").focus();
           window.alert("氏名(名)を確認してください");
+        } else if (/\d/.test(this.editData.lastname)) {
+          document.getElementById("Lname2").focus();
+          window.alert("氏名(姓)には数字が含まれてはいけません");
         } else if (this.editData.address.trim() === "") {
           document.getElementById("address2").focus();
           window.alert("住所を確認してください");
         } else if (this.editData.birth === "") {
           window.alert("生年月日を確認してください");
-        } else if (this.editData.telephone.trim() === "") {
+        } else if (!this.validatePhoneNumber(this.editData.telephone)) {
           document.getElementById("tel2").focus();
           window.alert("電話番号を確認してください");
         } else {
@@ -382,9 +392,15 @@ export default {
       if (this.newData.firstname.trim() === "") {
         document.getElementById("Fname1").focus();
         window.alert("氏名(姓)を入力してください");
+      } else if (/\d/.test(this.newData.firstname)) {
+        document.getElementById("Fname1").focus();
+        window.alert("氏名(姓)には数字が含まれてはいけません");
       } else if (this.newData.lastname.trim() === "") {
         document.getElementById("Lname1").focus();
         window.alert("氏名(名)を入力してください");
+      } else if (/\d/.test(this.newData.lastname)) {
+        document.getElementById("Lname1").focus();
+        window.alert("氏名(名)には数字が含まれてはいけません");
       } else if (this.newData.address.trim() === "") {
         document.getElementById("address1").focus();
         window.alert("住所を入力してください");
@@ -393,6 +409,9 @@ export default {
       } else if (this.newData.telephone.trim() === "") {
         document.getElementById("tel1").focus();
         window.alert("電話番号を入力してください");
+      } else if (!this.validatePhoneNumber(this.newData.telephone)) {
+        document.getElementById("tel1").focus();
+        window.alert("電話番号を確認してください");
       } else {
         axios
           .post("/api/users", this.newData)
@@ -420,6 +439,7 @@ export default {
     },
     changePage(page) {
       this.currentPage = page;
+      this.selectedId = null;
     },
   },
 
